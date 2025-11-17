@@ -10,10 +10,10 @@ import { MatInputModule } from '@angular/material/input';
 import { catchError, finalize, of } from 'rxjs';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { FormAction } from '../../../../enums/form-action.enum';
+import { NotificationService } from '../../../../shared/services/notification.service';
 
 @Component({
   selector: 'app-book-list',
@@ -40,7 +40,7 @@ export class BookListComponent implements OnInit, AfterViewInit {
 
   @ViewChild('activePaginator') paginator!: MatPaginator;
 
-  constructor(private _iBookService: IBookService, private _snack: MatSnackBar, private _router: Router) {}
+  constructor(private _iBookService: IBookService, private _notificationService: NotificationService, private _router: Router) {}
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -55,10 +55,7 @@ export class BookListComponent implements OnInit, AfterViewInit {
 
     this._iBookService.loadBooks().pipe(
       catchError((err) => {
-        this._snack.open('Http error: '+err.message, 'Close', {
-          duration: 3000,
-          panelClass: ['toast-error'],
-        });
+        this._notificationService.showToast(true, 'Http error: '+err.message);
         return of([]);
       }),
       finalize(() => this.isLoading.set(false))
@@ -101,10 +98,7 @@ export class BookListComponent implements OnInit, AfterViewInit {
         this._iBookService.deleteBook(id).pipe(
           finalize(() => this._loadBooks())
         ).subscribe(() => {
-          this._snack.open('Book deleted!', 'Close', {
-            duration: 3000,
-            panelClass: ['toast-success'],
-          });
+          this._notificationService.showToast(false, 'Book deleted!');
         });
       }
     });

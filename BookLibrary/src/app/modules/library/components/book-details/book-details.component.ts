@@ -8,8 +8,8 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { BaseFieldComponent } from '../../../../shared/base-field/base-field.component';
 import { IBook, IBookParams } from '../../../../models/library';
 import { catchError, finalize, of } from 'rxjs';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { NotificationService } from '../../../../shared/services/notification.service';
 
 @Component({
   selector: 'app-book-details',
@@ -30,7 +30,7 @@ export class BookDetailsComponent implements OnInit {
   isSaving: boolean = false;
   isLoading = signal(false);
 
-  constructor(private _iBookService: IBookService, private _snack: MatSnackBar, private _activatedRoute: ActivatedRoute, private _formBuilder: FormBuilder, private _router: Router) {
+  constructor(private _iBookService: IBookService, private _notification: NotificationService, private _activatedRoute: ActivatedRoute, private _formBuilder: FormBuilder, private _router: Router) {
     const [{path}] = this._activatedRoute.snapshot.url;
 
     if (path == FormAction.Add) {
@@ -76,11 +76,8 @@ export class BookDetailsComponent implements OnInit {
 
         this._iBookService.getBook(this._bookId)
           .pipe(
-            catchError(() => {              
-              this._snack.open('No book found!', 'Close', {
-                duration: 3000,
-                panelClass: ['toast-error'],
-              });
+            catchError(() => {
+              this._notification.showToast(true, 'No book found!');
               this._router.navigate(['library']);
               return of(null);
             }),
@@ -114,19 +111,13 @@ export class BookDetailsComponent implements OnInit {
         this._iBookService.createBook(bookParam)
           .pipe(
             catchError((err) => {
-              this._snack.open('Http error: '+err.message, 'Close', {
-                duration: 3000,
-                panelClass: ['toast-error'],
-              });
+              this._notification.showToast(true, 'Http error: '+err.message);
               return of([]);
             }),
             finalize(() => this.isSaving = false)
           )
           .subscribe(() => {
-            this._snack.open('You have successfully added a new book', 'Close', {
-              duration: 3000,
-              panelClass: ['toast-success'],
-            });
+            this._notification.showToast(false, 'You have successfully added a new book');
             this._router.navigate(['library'])
           });
           
@@ -139,19 +130,13 @@ export class BookDetailsComponent implements OnInit {
         this._iBookService.updateBook(updateParams)
           .pipe(
             catchError((err) => {
-              this._snack.open('Http error: '+err.message, 'Close', {
-                duration: 3000,
-                panelClass: ['toast-error'],
-              });
+              this._notification.showToast(true, 'Http error: '+err.message);
               return of([]);
             }),
             finalize(() => this.isSaving = false)
           )
           .subscribe(() => {
-            this._snack.open('You have successfully updated the book', 'Close', {
-              duration: 3000,
-              panelClass: ['toast-success'],
-            });
+            this._notification.showToast(false, 'You have successfully updated the book');
             this._router.navigate(['library'])
           });
         
