@@ -11,6 +11,7 @@ Angular Take-Home Assignment
 - Download Visual Studio Code
 - Download NodeJS v22 from the link https://nodejs.org/en/download
 - In VS Code open Terminal (Terminal/New Terminal)
+- Change directory to the Book Library (cd BookLibrary)
 - Run the command 'npm i @angular/cli'
 - Run the command 'npm i'
 - Run the command 'npm start'
