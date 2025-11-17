@@ -1,0 +1,13 @@
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+}

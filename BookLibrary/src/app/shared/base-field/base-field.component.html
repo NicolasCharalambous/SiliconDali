@@ -1,0 +1,23 @@
+<div class="form-group">
+    <label #headerLabel [for]="for || null" class="header-label" *ngIf="header">
+        {{ header }}
+    </label>
+    <div #fieldDiv>
+        <ng-content select=".field"></ng-content>
+    </div>
+
+    <div class="col-lg-12" #errorDiv>
+        <div *ngIf="showRequiredErrors || showPatternErrors">
+            <div class="row" *ngIf="showRequiredErrors">
+                <label class="control-label error text-danger">
+                    This field is mandatory
+                </label>
+            </div>
+            <div class="row" *ngIf="showPatternErrors">
+                <label class="control-label error text-danger">
+                    Invalid Number
+                </label>
+            </div>
+        </div>
+    </div>
+</div>

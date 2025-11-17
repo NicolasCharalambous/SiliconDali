@@ -1,0 +1,30 @@
+<div class="justify-content-middle">
+    <h3>Book Details</h3>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="!isLoading(); else loader">
+        <div class="row w-75">
+            <base-field class="col-12 col-lg-6 mt-2" [header]="'Title'" [control]="form.controls['title']" for="_title">
+                <input id="_title" type="text" class="field form-control" formControlName="title" placeholder="Title"/>
+            </base-field>
+            <base-field class="col-12 col-lg-6 mt-2" [header]="'Author'" [control]="form.controls['author']" for="_author">
+                <input id="_author" type="text" class="field form-control" formControlName="author" placeholder="Author"/>
+            </base-field>
+            <base-field class="col-12 col-lg-6 mt-2" [header]="'Year'" [control]="form.controls['year']" for="_year">
+                <input id="_year" type="text" class="field form-control" formControlName="year" placeholder="Year"/>
+            </base-field>    
+            <base-field class="col-12 col-lg-6 mt-2" [header]="'Genre'" [control]="form.controls['genre']" for="_genre">
+                <input id="_genre" type="text" class="field form-control" formControlName="genre" placeholder="Genre"/>
+            </base-field>
+        </div>
+        <div class="mt-4 d-flex gap-2 align-items-center">
+            <button type="submit" class="btn btn-primary btn-sm" [disabled]="!form.valid || isSaving" style="min-width: 100px;">
+                Save
+                <div class="spinner-border" role="status" *ngIf="isSaving"></div>
+            </button>
+        </div>
+    </form>
+</div>
+
+<ng-template #loader>
+    <mat-spinner diameter="30"></mat-spinner>
+</ng-template>
